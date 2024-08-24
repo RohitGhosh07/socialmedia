@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swipecv/models/image_model.dart';
+import 'package:kkh_events/models/image_model.dart';
 
 class ZoomView extends StatelessWidget {
   const ZoomView({

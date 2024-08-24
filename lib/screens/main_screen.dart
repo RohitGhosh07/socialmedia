@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:swipecv/models/image_model.dart';
-import 'package:swipecv/screens/components/FilterPopup.dart';
-import 'package:swipecv/screens/components/ZoomView.dart';
+import 'package:kkh_events/models/image_model.dart';
+import 'package:kkh_events/screens/components/FilterPopup.dart';
+import 'package:kkh_events/screens/components/ZoomView.dart';
 import '../providers/image_provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.error, size: 50),
-                  Text('No CV found'),
+                  Text('No Events found'),
                 ],
               ),
             ),

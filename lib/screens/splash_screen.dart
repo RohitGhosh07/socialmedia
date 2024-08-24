@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:swipecv/screens/main_screen.dart';
+import 'package:kkh_events/screens/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

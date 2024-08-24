@@ -1,4 +1,4 @@
-package com.example.swipecv
+package com.forcepower.kkhevents
 
 import io.flutter.embedding.android.FlutterActivity
 

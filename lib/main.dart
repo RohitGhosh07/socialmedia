@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swipecv/screens/splash_screen.dart';
+import 'package:kkh_events/screens/splash_screen.dart';
 import 'providers/image_provider.dart';
-import 'screens/main_screen.dart';
 
 void main() {
   runApp(
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Swipe CV',
+      title: 'KKH Events',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

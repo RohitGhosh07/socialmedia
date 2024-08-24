@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "swipecv" "\0"
+            VALUE "FileDescription", "kkh_events" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "swipecv" "\0"
+            VALUE "InternalName", "kkh_events" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "swipecv.exe" "\0"
-            VALUE "ProductName", "swipecv" "\0"
+            VALUE "OriginalFilename", "kkh_events.exe" "\0"
+            VALUE "ProductName", "kkh_events" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swipecv/providers/image_provider.dart';
+import 'package:kkh_events/providers/image_provider.dart';
 
 class FilterPopup extends StatelessWidget {
   @override

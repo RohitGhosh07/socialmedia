@@ -1,7 +1,7 @@
-name: swipecv
-description: "A new Flutter project."
+name: kkh_events
+description: "KKH Events App"
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
