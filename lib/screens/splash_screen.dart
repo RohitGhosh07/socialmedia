@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:kkh_events/screens/main_main.dart';
 import 'dart:async';
 
 import 'package:kkh_events/screens/main_screen.dart';
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => MainScreen(),
+          builder: (context) => MainMainScreen(),
         ),
       );
     });
