@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:kkh_events/models/image_model.dart';
 import 'package:kkh_events/screens/components/FilterPopup.dart';
 import 'package:kkh_events/screens/components/ZoomView.dart';
+import 'package:shimmer/shimmer.dart';
 import '../providers/image_provider.dart';
 
 class MainScreen extends StatefulWidget {
@@ -67,14 +68,6 @@ class _MainScreenState extends State<MainScreen> {
     }
     int _currentIndex = 0;
 
-    // final List<Widget> _screens = [
-    //   HomeScreen(),
-    //   SearchScreen(),
-    //   MainScreen(),
-    //   NotificationScreen(),
-    //   ProfileScreen(),
-    // ];
-
     return Scaffold(
       body: Stack(
         children: [
@@ -107,6 +100,26 @@ class _MainScreenState extends State<MainScreen> {
                         fit: BoxFit.fitWidth,
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child; // Image is fully loaded
+                          } else {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                color: Colors.white,
+                              ),
+                            );
+                          }
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Center(
+                              child: Icon(Icons.error)); // Handle error
+                        },
                       ),
                     ),
                     // Black overlay with opacity
