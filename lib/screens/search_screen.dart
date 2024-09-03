@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:kkh_events/models/image_model.dart';
 import 'package:kkh_events/providers/image_provider.dart';
-import 'package:kkh_events/screens/components/BottomBar.dart';
-import 'package:kkh_events/screens/main_screen.dart';
+import 'package:kkh_events/screens/swipe_screen.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -29,103 +28,84 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Explorer'),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              height: 40.0, // Reduced height for a sleeker look
-              child: TextField(
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                  // Update search query in the provider
-                  imageProvider.searchValue = value;
-                },
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Container(
+          height: 40.0,
+          child: TextField(
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value;
+              });
+              // Update search query in the provider
+              imageProvider.searchValue = value;
+            },
+            decoration: InputDecoration(
+              hintText: 'Search...',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                borderSide: BorderSide.none,
               ),
+              filled: true,
+              fillColor: Colors.grey[200],
+              contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
             ),
           ),
-          Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: StaggeredGrid.count(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 4,
-                        children: images.map((image) {
-                          return StaggeredGridTile.count(
-                            crossAxisCellCount: 2,
-                            mainAxisCellCount:
-                                2, // Adjusted to a default aspect ratio
-                            child: Stack(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              MainScreen()), // Replace MainScreen with your screen's name
-                                    );
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      image: DecorationImage(
-                                        image: NetworkImage(image.imgUrl ??
-                                            'https://via.placeholder.com/150'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 8.0,
-                                  bottom: 8.0,
-                                  child: Text(
-                                    image.name ?? 'No Name',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 10.0,
-                                          color: Colors.black,
-                                          offset: Offset(2, 2),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
+        ),
+      ),
+      body: isLoading
+          ? GridView.builder(
+              padding: const EdgeInsets.all(2.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 3 columns like Instagram
+                crossAxisSpacing: 2.0,
+                mainAxisSpacing: 2.0,
+                childAspectRatio: 1.0, // Square items
+              ),
+              itemCount: 66, // Show 9 shimmer tiles (3x3 grid)
+              itemBuilder: (context, index) {
+                return Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    color: Colors.white,
+                  ),
+                );
+              },
+            )
+          : GridView.builder(
+              padding: const EdgeInsets.all(2.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 3 columns like Instagram
+                crossAxisSpacing: 2.0,
+                mainAxisSpacing: 2.0,
+                childAspectRatio: 1.0, // Square items
+              ),
+              itemCount: images.length,
+              itemBuilder: (context, index) {
+                final image = images[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MainScreen()), // Replace MainScreen with your screen's name
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            image.imgUrl ?? 'assets/images/KKH Events.png'),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-          ),
-        ],
-      ),
-      // bottomNavigationBar: BottomBar(),
+                );
+              },
+            ),
     );
   }
 }

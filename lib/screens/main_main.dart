@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kkh_events/screens/components/BottomBar.dart';
 import 'package:kkh_events/screens/home_screen.dart';
-import 'package:kkh_events/screens/main_screen.dart';
+import 'package:kkh_events/screens/swipe_screen.dart';
 import 'package:kkh_events/screens/notification_screen.dart';
 import 'package:kkh_events/screens/profile_screen.dart';
 import 'package:kkh_events/screens/search_screen.dart';

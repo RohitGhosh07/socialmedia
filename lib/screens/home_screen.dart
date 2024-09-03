@@ -48,27 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'KKH',
-          style: TextStyle(
-            fontFamily: 'Billabong',
-            fontSize: 32,
-            color: Colors.black,
-          ),
+        title: Image.asset(
+          'assets/images/2 - Copy.png', // Replace with your image asset path
+          height: 40, // Adjust the height as needed
         ),
-        leading: IconButton(
-          icon: Icon(Icons.camera_alt),
-          color: Colors.black,
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.send),
-            color: Colors.black,
-            onPressed: () {},
-          ),
-        ],
       ),
+
       body: posts.isEmpty && isLoading
           ? ListView.builder(
               itemCount: 10, // Show 10 placeholders while loading

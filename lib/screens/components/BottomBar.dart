@@ -37,33 +37,59 @@ class _BottomBarState extends State<BottomBar> {
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
       type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.home_filled,
+              size: 30,
+              color: _selectedIndex == 0 ? Colors.black : Colors.grey),
+          label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
+          icon: Icon(Icons.search,
+              size: 30,
+              color: _selectedIndex == 1 ? Colors.black : Colors.grey),
+          label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.play_circle_fill),
-          label: 'Play',
+          icon: Icon(Icons.play_circle_fill,
+              size: 30,
+              color: _selectedIndex == 2 ? Colors.black : Colors.grey),
+          label: '',
+        ),
+        // BottomNavigationBarItem(
+        //   icon: Container(
+        //     padding: EdgeInsets.all(0),
+        //     decoration: BoxDecoration(
+        //       shape: BoxShape.circle,
+        //       gradient: LinearGradient(
+        //         colors: [Colors.redAccent, Colors.orangeAccent],
+        //         begin: Alignment.topLeft,
+        //         end: Alignment.bottomRight,
+        //       ),
+        //     ),
+        //     child: Icon(Icons.play_circle_fill, size: 30, color: Colors.white),
+        //   ),
+        //   label: '',
+        // ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications,
+              size: 30,
+              color: _selectedIndex == 3 ? Colors.black : Colors.grey),
+          label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
-          label: 'Notifications',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+          icon: Icon(Icons.person,
+              size: 30,
+              color: _selectedIndex == 4 ? Colors.black : Colors.grey),
+          label: '',
         ),
       ],
-      selectedItemColor: Colors.blueAccent,
+      selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey,
       backgroundColor: Colors.white,
-      showSelectedLabels: true,
+      showSelectedLabels: false,
       showUnselectedLabels: false,
+      elevation: 10,
     );
   }
 }
