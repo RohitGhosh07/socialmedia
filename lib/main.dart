@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:kkh_events/storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:kkh_events/screens/splash_screen.dart';
 import 'providers/image_provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Get.put(Storage()).initStorage();
   runApp(
     MultiProvider(
       providers: [
@@ -26,5 +31,14 @@ class MyApp extends StatelessWidget {
       ),
       home: SplashScreen(),
     );
+  }
+}
+
+class ClearFocusOnPush extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    final focus = FocusManager.instance.primaryFocus;
+    focus?.unfocus();
   }
 }

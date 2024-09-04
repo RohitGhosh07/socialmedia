@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:kkh_events/screens/components/BottomBar.dart';
-import 'package:kkh_events/screens/home_screen.dart';
-import 'package:kkh_events/screens/notification_screen.dart';
-import 'package:kkh_events/screens/profile_screen.dart';
-import 'package:kkh_events/screens/search_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:kkh_events/models/image_model.dart';
 import 'package:kkh_events/screens/components/FilterPopup.dart';
@@ -25,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   ValueNotifier<double> scaleNotifier = ValueNotifier<double>(1.0);
   final TextEditingController _searchController = TextEditingController();
   bool _isExpanded = false;
-  // int _currentIndex = 0;
+  int _currentIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -66,7 +61,6 @@ class _MainScreenState extends State<MainScreen> {
     if (selectedClub.isNotEmpty) {
       images = images.where((e) => e.club == selectedClub).toList();
     }
-    int _currentIndex = 0;
 
     return Scaffold(
       body: Stack(
@@ -117,7 +111,7 @@ class _MainScreenState extends State<MainScreen> {
                           }
                         },
                         errorBuilder: (context, error, stackTrace) {
-                          return Center(
+                          return const Center(
                               child: Icon(Icons.error)); // Handle error
                         },
                       ),
@@ -194,29 +188,29 @@ class _MainScreenState extends State<MainScreen> {
                                 ],
                               ),
                               const SizedBox(width: 16),
-                              OutlinedButton(
-                                onPressed: () {
-                                  // Implement the follow action
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(
-                                      color: Colors.white), // White border
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        20), // Rounded corners
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 0), // Padding inside the button
-                                  backgroundColor: Colors
-                                      .transparent, // Transparent background
-                                ),
-                                child: const Text(
-                                  'Follow',
-                                  style: TextStyle(
-                                      color: Colors.white), // White text
-                                ),
-                              ),
+                              // OutlinedButton(
+                              //   onPressed: () {
+                              //     // Implement the follow action
+                              //   },
+                              //   style: OutlinedButton.styleFrom(
+                              //     side: const BorderSide(
+                              //         color: Colors.white), // White border
+                              //     shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(
+                              //           20), // Rounded corners
+                              //     ),
+                              //     padding: const EdgeInsets.symmetric(
+                              //         horizontal: 20,
+                              //         vertical: 0), // Padding inside the button
+                              //     backgroundColor: Colors
+                              //         .transparent, // Transparent background
+                              //   ),
+                              //   child: const Text(
+                              //     'Follow',
+                              //     style: TextStyle(
+                              //         color: Colors.white), // White text
+                              //   ),
+                              // ),
                             ],
                           ),
                           const SizedBox(height: 8),

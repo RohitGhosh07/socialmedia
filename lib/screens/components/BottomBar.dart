@@ -38,18 +38,18 @@ class _BottomBarState extends State<BottomBar> {
       onTap: _onItemTapped,
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_filled,
-              size: 30,
-              color: _selectedIndex == 0 ? Colors.black : Colors.grey),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search,
-              size: 30,
-              color: _selectedIndex == 1 ? Colors.black : Colors.grey),
-          label: '',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.home_filled,
+        //       size: 30,
+        //       color: _selectedIndex == 0 ? Colors.black : Colors.grey),
+        //   label: '',
+        // ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.search,
+        //       size: 30,
+        //       color: _selectedIndex == 1 ? Colors.black : Colors.grey),
+        //   label: '',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.play_circle_fill,
               size: 30,
@@ -71,12 +71,12 @@ class _BottomBarState extends State<BottomBar> {
         //   ),
         //   label: '',
         // ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.notifications,
-              size: 30,
-              color: _selectedIndex == 3 ? Colors.black : Colors.grey),
-          label: '',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.notifications,
+        //       size: 30,
+        //       color: _selectedIndex == 3 ? Colors.black : Colors.grey),
+        //   label: '',
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person,
               size: 30,
