@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kkh_events/admin/main.dart';
 
 class BottomBar extends StatefulWidget {
   final int currentIndex;
@@ -27,6 +28,9 @@ class _BottomBarState extends State<BottomBar> {
     setState(() {
       _selectedIndex = index;
     });
+    if (index == 1) {
+      runApp(const Admin());
+    }
     widget
         .onTabTapped(index); // Call the provided function to update the screen
   }

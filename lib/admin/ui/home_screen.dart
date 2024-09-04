@@ -64,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting &&
                       !snapshot.hasData) {
-                    return Center(
-                      child: CustomWidgets.showLoadingLoader(),
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
                   } else {
                     if (snapshot.hasError) {
