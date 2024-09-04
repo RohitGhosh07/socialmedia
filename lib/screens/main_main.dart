@@ -5,6 +5,8 @@ import 'package:kkh_events/screens/components/BottomBar.dart';
 import 'package:kkh_events/screens/swipe_screen.dart';
 
 class MainMainScreen extends StatefulWidget {
+  const MainMainScreen({super.key});
+
   @override
   _MainMainScreenState createState() => _MainMainScreenState();
 }
@@ -13,8 +15,8 @@ class _MainMainScreenState extends State<MainMainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    MainScreen(),
-    Admin(),
+    const MainScreen(),
+    const Admin(),
   ];
 
   @override

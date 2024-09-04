@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import 'package:kkh_events/admin/class/clubs_class.dart';
+import 'package:kkh_events/admin/class/events_class.dart';
+import 'package:kkh_events/admin/class/types_class.dart';
 import 'package:provider/provider.dart';
 import 'package:kkh_events/models/image_model.dart';
 import 'package:kkh_events/screens/components/FilterPopup.dart';
@@ -21,6 +27,13 @@ class _MainScreenState extends State<MainScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _isExpanded = false;
   int _currentIndex = 0;
+  String selctedFilter = 'Club';
+  String? selectedClub;
+  String? selectedType;
+  DateTime? startDate;
+  DateTime? endDate;
+  late Future<List<EventsClass>> eventsList;
+
   @override
   void initState() {
     super.initState();
@@ -335,10 +348,13 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       // Modern Filter Button
                       GestureDetector(
-                        onTap: () => showDialog(
-                          context: context,
-                          builder: (context) => FilterPopup(),
-                        ),
+                        // onTap: () => showDialog(
+                        //   context: context,
+                        //   builder: (context) => FilterPopup(),
+                        // ),
+                        onTap: () async {
+                          filters();
+                        },
                         child: Container(
                           height: 50,
                           width: 50,
@@ -511,5 +527,243 @@ class _MainScreenState extends State<MainScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void filters() async {
+    await Get.dialog(
+      SimpleDialog(
+        title: Row(
+          children: [
+            const Text('Filter Events'),
+            const Spacer(),
+            // Reset button
+            TextButton(
+              onPressed: () {
+                Get.back();
+                setState(() {
+                  eventsList = EventsClass.getEvents();
+                  selectedClub = null;
+                  selectedType = null;
+                  startDate = null;
+                  endDate = null;
+                });
+              },
+              child: const Text(
+                'Reset',
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
+          ],
+        ),
+        children: [
+          // (Dropdown) Filter by: Club, Type, Date
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text('Filter by: '),
+                const Spacer(),
+                DropdownButton<String>(
+                  value: selctedFilter,
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'Club',
+                      child: Text('Club'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Type',
+                      child: Text('Type'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Date',
+                      child: Text('Date'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      selctedFilter = value!;
+                    });
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      filters();
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          selctedFilter == 'Type'
+              ? filterByType()
+              : selctedFilter == 'Club'
+                  ? filterByClub()
+                  : filterbyDate(),
+        ],
+      ),
+    );
+  }
+
+  Widget filterByClub() {
+    return FutureBuilder(
+        future: ClubsClass.getClubs(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error loading clubs'),
+              );
+            } else {
+              List<ClubsClass>? clubs = snapshot.data;
+              return Column(
+                children: [
+                  ...?clubs?.map((e) {
+                    return ListTile(
+                      title: Text(e.club ?? '',
+                          style: TextStyle(
+                              color: e.club == selectedClub
+                                  ? Colors.blue
+                                  : Colors.black)),
+                      onTap: () {
+                        Get.back();
+                        setState(() {
+                          eventsList = EventsClass.getEvents(search: e.club);
+                          selectedClub = e.club;
+                          selectedType = null;
+                        });
+                      },
+                    );
+                  })
+                ],
+              );
+            }
+          }
+        });
+  }
+
+  Widget filterByType() {
+    return FutureBuilder(
+        future: TypesClass.getTypes(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error loading types'),
+              );
+            } else {
+              List<TypesClass>? types = snapshot.data;
+              return Column(
+                children: [
+                  ...?types?.map((e) {
+                    return ListTile(
+                      title: Text(e.area ?? '',
+                          style: TextStyle(
+                              color: e.area == selectedType
+                                  ? Colors.blue
+                                  : Colors.black)),
+                      onTap: () {
+                        Get.back();
+                        setState(() {
+                          eventsList = EventsClass.getEvents(search: e.area);
+                          selectedType = e.area;
+                          selectedClub = null;
+                        });
+                      },
+                    );
+                  })
+                ],
+              );
+            }
+          }
+        });
+  }
+
+  Widget filterbyDate() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          // Date Picker
+          Row(
+            children: [
+              const Text('From: '),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () {
+                  // show date picker
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2025),
+                  ).then((value) {
+                    if (value != null) {
+                      // set date
+                      // filter events
+                      setState(() {
+                        startDate = value;
+                      });
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        filters();
+                      });
+                    }
+                  });
+                },
+                child: startDate == null
+                    ? const Text('Select Date')
+                    : Text(DateFormat('dd/MM/yyyy').format(startDate!)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const Text('To: '),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () {
+                  // show date picker
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2025),
+                  ).then((value) {
+                    if (value != null) {
+                      // set date
+                      // filter events
+                      setState(() {
+                        endDate = value;
+                      });
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        filters();
+                      });
+                    }
+                  });
+                },
+                child: endDate == null
+                    ? const Text('Select Date')
+                    : Text(DateFormat('dd/MM/yyyy')
+                        .format(endDate ?? DateTime.now())),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          (startDate == null || endDate == null)
+              ? const SizedBox()
+              : ElevatedButton(
+                  onPressed: () {
+                    Get.back();
+                    setState(() {
+                      eventsList = EventsClass.getEventsbyDate(
+                          '&start_date=${DateFormat('yyyy-MM-dd').format(startDate ?? DateTime.now())}&end_date=${DateFormat('yyyy-MM-dd').format(endDate ?? DateTime.now())}');
+                    });
+                  },
+                  child: const Text('Filter'),
+                ),
+        ],
+      ),
+    );
   }
 }
