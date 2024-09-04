@@ -25,6 +25,8 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
   bool? isEdit;
   TextEditingController descriptionController = TextEditingController();
   TextEditingController clubController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+
   TextEditingController typeController = TextEditingController();
   DateTime? startDateController;
   DateTime? endDateController;
@@ -69,6 +71,7 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
       descriptionController.text = event?.name ?? '';
       clubController.text = event?.club ?? '';
       typeController.text = event?.area ?? '';
+      imageController.text = event?.imgUrl ?? '';
       startDateController = event?.startDate != null
           ? DateTime.parse(event?.startDate ?? '')
           : null;
@@ -81,7 +84,31 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text((isEdit ?? false) ? 'Edit Event' : 'Add Event'),
+          backgroundColor: Colors.blueGrey, // Apply gradient background
+          elevation: 0, // Remove shadow for a flatter design
+          title: Text(
+            (isEdit ?? false) ? 'Edit Event' : 'Add Event',
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          centerTitle: true, // Center align the title
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: FutureBuilder(
@@ -241,6 +268,51 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
                         ),
                       ),
                     const SizedBox(height: 20),
+                    Stack(
+                      children: [
+                        // Image or placeholder
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Container(
+                            height: 200,
+                            width: double.infinity,
+                            color: Colors.grey[
+                                200], // Background color for the container
+                            child: imageController.text.isEmpty
+                                ? Center(
+                                    child: Text(
+                                      'Upload Image From Below',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.grey[600],
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )
+                                : Image.network(
+                                    imageController.text,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.contain,
+                                  ),
+                          ),
+                        ),
+                        // Optional: Add a border or decoration
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              height: 4,
+                              width: 50,
+                              color:
+                                  Colors.blue, // Optional border at the bottom
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                     if (image != null)
                       Image.file(
                         File(image?.path ?? ''),

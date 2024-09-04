@@ -34,15 +34,35 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('KKH Admin Panel'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/2 - Copy.png', // Replace with your image path
+              height: 40,
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Admin Panel',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             onPressed: () {
               logout();
             },
             icon: const Icon(Icons.logout),
+            color: Colors.red,
           ),
         ],
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -54,7 +74,33 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           });
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: const LinearGradient(
+              colors: [Colors.grey, Colors.blueGrey],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 3,
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.add,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -83,37 +129,99 @@ class _HomeScreenState extends State<HomeScreen> {
                           // Filter
                           Padding(
                             padding: const EdgeInsets.all(10),
+                            //search bar and fileter button
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: TextField(
-                                    controller: searchController,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Search by club, description',
-                                      prefixIcon: Icon(Icons.search),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      gradient: const LinearGradient(
+                                        colors: [Colors.blueGrey, Colors.grey],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
                                     ),
-                                    onSubmitted: (value) {
-                                      setState(() {
-                                        eventsList = EventsClass.getEvents(
-                                            search: value);
-                                      });
-                                    },
-                                    onChanged: (value) {
-                                      if (value.isEmpty) {
+                                    padding: const EdgeInsets.all(
+                                        2), // Add some padding to create a border effect
+                                    child: TextField(
+                                      controller: searchController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Search by club, description',
+                                        hintStyle:
+                                            TextStyle(color: Colors.grey[600]),
+                                        prefixIcon: const Icon(Icons.search,
+                                            color: Colors.black),
+                                        filled: true,
+                                        fillColor: Colors
+                                            .white, // Fill color inside the search bar
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 12),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          borderSide: BorderSide.none,
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          borderSide: const BorderSide(
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                      onSubmitted: (value) {
                                         setState(() {
-                                          eventsList = EventsClass.getEvents();
+                                          eventsList = EventsClass.getEvents(
+                                              search: value);
                                         });
-                                      }
-                                    },
+                                      },
+                                      onChanged: (value) {
+                                        if (value.isEmpty) {
+                                          setState(() {
+                                            eventsList =
+                                                EventsClass.getEvents();
+                                          });
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    // show popup
-                                    filters();
-                                  },
-                                  child: const Text('Filter'),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                      colors: [Colors.black, Colors.blueGrey],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        offset: Offset(0, 4),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      filters();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: const CircleBorder(),
+                                      padding: const EdgeInsets.all(20),
+                                      backgroundColor: Colors
+                                          .transparent, // Make button background transparent
+                                      shadowColor: Colors
+                                          .transparent, // Remove button shadow to use custom shadow
+                                    ),
+                                    child: const Icon(
+                                      Icons.filter_list,
+                                      size: 24,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -130,17 +238,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemCount: events?.length,
                                     itemBuilder: (context, index) {
                                       return Padding(
-                                        padding: const EdgeInsets.all(5.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
                                         child: InkWell(
                                           onTap: () => showEventDetails(
                                               events?[index] ?? EventsClass()),
                                           child: Container(
-                                            padding: const EdgeInsets.all(5),
+                                            padding: const EdgeInsets.all(10),
                                             margin: const EdgeInsets.all(5),
                                             decoration: BoxDecoration(
-                                              color: Colors.grey[200],
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                                  BorderRadius.circular(12),
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Colors.blueGrey
+                                                      .withOpacity(0.8),
+                                                  Colors.black.withOpacity(0.8)
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black12,
+                                                  offset: Offset(0, 4),
+                                                  blurRadius: 8,
+                                                ),
+                                              ],
                                             ),
                                             child: Column(
                                               crossAxisAlignment:
@@ -149,67 +273,104 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                        events?[index].area ??
-                                                            '',
-                                                        style: const TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w300)),
+                                                      events?[index].area ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
                                                     const Spacer(),
                                                     Text(
                                                       "Added: ${events?[index].dateAdded == null ? "N/A" : DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.parse(events?[index].dateAdded ?? ''))}",
                                                       style: const TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w300),
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 5),
+                                                const SizedBox(height: 8),
                                                 Row(
                                                   children: [
                                                     Container(
-                                                      width: 50,
-                                                      height: 50,
+                                                      width: 60,
+                                                      height: 60,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(10),
                                                         image: DecorationImage(
                                                           image: NetworkImage(
                                                               events?[index]
                                                                       .imgUrl ??
                                                                   ''),
                                                           fit: BoxFit.cover,
+                                                          colorFilter: events?[
+                                                                          index]
+                                                                      .imgUrl ==
+                                                                  null
+                                                              ? ColorFilter.mode(
+                                                                  Colors.grey,
+                                                                  BlendMode
+                                                                      .saturation)
+                                                              : null,
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 10),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(events?[index]
-                                                                .club ??
-                                                            ''),
-                                                        Text(
-                                                          events?[index].name ??
-                                                              '',
-                                                          maxLines: 3,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ],
+                                                    const SizedBox(width: 15),
+                                                    Expanded(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            events?[index]
+                                                                    .club ??
+                                                                '',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 4),
+                                                          Text(
+                                                            events?[index]
+                                                                    .name ??
+                                                                '',
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: Colors
+                                                                  .white70,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    const Spacer(),
+                                                    const SizedBox(width: 15),
                                                     Column(
                                                       children: [
-                                                        // Three dots
                                                         IconButton(
                                                           onPressed: () {
-                                                            // show bottom sheet
+                                                            // Show bottom sheet
                                                             Get.bottomSheet(
                                                               Container(
                                                                 width: double
@@ -220,20 +381,70 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .white,
                                                                   borderRadius:
                                                                       BorderRadius
-                                                                          .circular(
-                                                                              20),
+                                                                          .vertical(
+                                                                    top: Radius
+                                                                        .circular(
+                                                                            20),
+                                                                  ),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: Colors
+                                                                          .black26,
+                                                                      blurRadius:
+                                                                          10,
+                                                                      spreadRadius:
+                                                                          2,
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        20),
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        20,
+                                                                    horizontal:
+                                                                        15),
                                                                 child: Column(
                                                                   mainAxisSize:
                                                                       MainAxisSize
                                                                           .min,
                                                                   children: [
-                                                                    TextButton(
-                                                                      onPressed:
+                                                                    // Modal Handle
+                                                                    Container(
+                                                                      width: 40,
+                                                                      height: 4,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .grey[300],
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(2),
+                                                                      ),
+                                                                      margin: const EdgeInsets
+                                                                          .only(
+                                                                          bottom:
+                                                                              15),
+                                                                    ),
+                                                                    // Options
+                                                                    ListTile(
+                                                                      leading: Icon(
+                                                                          Icons
+                                                                              .edit,
+                                                                          color:
+                                                                              Colors.blue),
+                                                                      title:
+                                                                          Text(
+                                                                        'Edit',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          color:
+                                                                              Colors.blue,
+                                                                        ),
+                                                                      ),
+                                                                      onTap:
                                                                           () {
                                                                         Get.back();
                                                                         Get.toNamed(
@@ -252,13 +463,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           });
                                                                         });
                                                                       },
-                                                                      child: const Text(
-                                                                          'Edit',
-                                                                          style:
-                                                                              TextStyle(color: Colors.blue)),
                                                                     ),
-                                                                    TextButton(
-                                                                      onPressed:
+                                                                    Divider(
+                                                                        color: Colors
+                                                                            .grey[300]),
+                                                                    ListTile(
+                                                                      leading: Icon(
+                                                                          Icons
+                                                                              .delete,
+                                                                          color:
+                                                                              Colors.red),
+                                                                      title:
+                                                                          Text(
+                                                                        'Delete',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          color:
+                                                                              Colors.red,
+                                                                        ),
+                                                                      ),
+                                                                      onTap:
                                                                           () {
                                                                         Get.back();
                                                                         showDialog(
@@ -267,14 +495,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           builder:
                                                                               (context) {
                                                                             return AlertDialog(
-                                                                              title: const Text('Delete Event'),
-                                                                              content: const Text('Are you sure you want to delete this event?'),
+                                                                              title: Text('Delete Event'),
+                                                                              content: Text('Are you sure you want to delete this event?'),
                                                                               actions: [
                                                                                 TextButton(
                                                                                   onPressed: () {
                                                                                     Get.back();
                                                                                   },
-                                                                                  child: const Text('Cancel', style: TextStyle(color: Colors.blue)),
+                                                                                  child: Text('Cancel', style: TextStyle(color: Colors.blue)),
                                                                                 ),
                                                                                 TextButton(
                                                                                   onPressed: () {
@@ -292,17 +520,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                       }
                                                                                     });
                                                                                   },
-                                                                                  child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                                                                  child: Text('Delete', style: TextStyle(color: Colors.red)),
                                                                                 ),
                                                                               ],
                                                                             );
                                                                           },
                                                                         );
                                                                       },
-                                                                      child: const Text(
-                                                                          'Delete',
-                                                                          style:
-                                                                              TextStyle(color: Colors.red)),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -310,7 +534,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             );
                                                           },
                                                           icon: const Icon(
-                                                              Icons.more_vert),
+                                                              Icons.more_vert,
+                                                              color: Colors
+                                                                  .white70),
                                                         ),
                                                       ],
                                                     ),
