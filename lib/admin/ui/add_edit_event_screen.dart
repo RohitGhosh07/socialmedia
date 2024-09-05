@@ -26,7 +26,7 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController clubController = TextEditingController();
   TextEditingController imageController = TextEditingController();
-
+  bool? showthumnail;
   TextEditingController typeController = TextEditingController();
   DateTime? startDateController;
   DateTime? endDateController;
@@ -115,7 +115,11 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
               future: initialData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                      child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: CircularProgressIndicator(),
+                  ));
                 }
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
@@ -268,52 +272,52 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
                         ),
                       ),
                     const SizedBox(height: 20),
-                    Stack(
-                      children: [
-                        // Image or placeholder
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                            height: 200,
-                            width: double.infinity,
-                            color: Colors.grey[
-                                200], // Background color for the container
-                            child: imageController.text.isEmpty
-                                ? Center(
-                                    child: Text(
-                                      'Upload Image From Below',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.grey[600],
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                : Image.network(
-                                    imageController.text,
-                                    height: 200,
-                                    width: double.infinity,
-                                    fit: BoxFit.contain,
-                                  ),
-                          ),
-                        ),
-                        // Optional: Add a border or decoration
-                        Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
+                    if (imageController.text != '')
+                      Stack(
+                        children: [
+                          // Image or placeholder
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: Container(
-                              height: 4,
-                              width: 50,
-                              color:
-                                  Colors.blue, // Optional border at the bottom
+                              height: 200,
+                              width: double.infinity,
+                              color: Colors.grey[
+                                  200], // Background color for the container
+                              child: imageController.text.isEmpty
+                                  ? Center(
+                                      child: Text(
+                                        'Upload Image From Below',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  : Image.network(
+                                      imageController.text,
+                                      height: 200,
+                                      width: double.infinity,
+                                      fit: BoxFit.contain,
+                                    ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-
-                    if (image != null)
+                          // Optional: Add a border or decoration
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                height: 4,
+                                width: 50,
+                                color: Colors
+                                    .blue, // Optional border at the bottom
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    if (image != null || showthumnail == false)
                       Image.file(
                         File(image?.path ?? ''),
                         height: 200,
@@ -328,6 +332,8 @@ class _AddEditEventScreenState extends State<AddEditEventScreen> {
                           if (value != null) {
                             setState(() {
                               image = value;
+                              showthumnail = false;
+                              imageController.text = '';
                             });
                           }
                         });

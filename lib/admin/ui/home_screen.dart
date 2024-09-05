@@ -226,335 +226,328 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                          events?.isEmpty ?? true
-                              ? const Center(
-                                  child: Text('No events found'),
-                                )
-                              :
-                              // List of Events
-                              Expanded(
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: events?.length,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0),
-                                        child: InkWell(
-                                          onTap: () => showEventDetails(
-                                              events?[index] ?? EventsClass()),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            margin: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  Colors.blueGrey
-                                                      .withOpacity(0.8),
-                                                  Colors.black.withOpacity(0.8)
-                                                ],
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black12,
-                                                  offset: Offset(0, 4),
-                                                  blurRadius: 8,
+                          // events?.isEmpty ?? true
+                          //     ? const Center(
+                          //         child: Text('No events found'),
+                          //       )
+                          //     :
+                          // List of Events
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: events?.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: InkWell(
+                                    onTap: () => showEventDetails(
+                                        events?[index] ?? EventsClass()),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.blueGrey.withOpacity(0.8),
+                                            Colors.black.withOpacity(0.8)
+                                          ],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            offset: Offset(0, 4),
+                                            blurRadius: 8,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                events?[index].area ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white,
                                                 ),
-                                              ],
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                "Added: ${events?[index].dateAdded == null ? "N/A" : DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.parse(events?[index].dateAdded ?? ''))}",
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 60,
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        events?[index].imgUrl ??
+                                                            ''),
+                                                    fit: BoxFit.cover,
+                                                    colorFilter:
+                                                        events?[index].imgUrl ==
+                                                                null
+                                                            ? ColorFilter.mode(
+                                                                Colors.grey,
+                                                                BlendMode
+                                                                    .saturation)
+                                                            : null,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 15),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      events?[index].area ?? '',
+                                                      events?[index].club ?? '',
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      events?[index].name ?? '',
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: const TextStyle(
                                                         fontSize: 14,
                                                         fontWeight:
-                                                            FontWeight.w500,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                    const Spacer(),
-                                                    Text(
-                                                      "Added: ${events?[index].dateAdded == null ? "N/A" : DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.parse(events?[index].dateAdded ?? ''))}",
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color: Colors.white,
+                                                            FontWeight.w400,
+                                                        color: Colors.white70,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Row(
-                                                  children: [
-                                                    Container(
-                                                      width: 60,
-                                                      height: 60,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              events?[index]
-                                                                      .imgUrl ??
-                                                                  ''),
-                                                          fit: BoxFit.cover,
-                                                          colorFilter: events?[
-                                                                          index]
-                                                                      .imgUrl ==
-                                                                  null
-                                                              ? ColorFilter.mode(
-                                                                  Colors.grey,
-                                                                  BlendMode
-                                                                      .saturation)
-                                                              : null,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 15),
-                                                    Expanded(
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            events?[index]
-                                                                    .club ??
-                                                                '',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  Colors.white,
+                                              ),
+                                              const SizedBox(width: 15),
+                                              Column(
+                                                children: [
+                                                  IconButton(
+                                                    onPressed: () {
+                                                      // Show bottom sheet
+                                                      Get.bottomSheet(
+                                                        Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .vertical(
+                                                              top: Radius
+                                                                  .circular(20),
                                                             ),
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors
+                                                                    .black26,
+                                                                blurRadius: 10,
+                                                                spreadRadius: 2,
+                                                              ),
+                                                            ],
                                                           ),
-                                                          const SizedBox(
-                                                              height: 4),
-                                                          Text(
-                                                            events?[index]
-                                                                    .name ??
-                                                                '',
-                                                            maxLines: 2,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color: Colors
-                                                                  .white70,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 15),
-                                                    Column(
-                                                      children: [
-                                                        IconButton(
-                                                          onPressed: () {
-                                                            // Show bottom sheet
-                                                            Get.bottomSheet(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 20,
+                                                                  horizontal:
+                                                                      15),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              // Modal Handle
                                                               Container(
-                                                                width: double
-                                                                    .infinity,
+                                                                width: 40,
+                                                                height: 4,
                                                                 decoration:
                                                                     BoxDecoration(
                                                                   color: Colors
-                                                                      .white,
+                                                                          .grey[
+                                                                      300],
                                                                   borderRadius:
                                                                       BorderRadius
-                                                                          .vertical(
-                                                                    top: Radius
-                                                                        .circular(
-                                                                            20),
-                                                                  ),
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: Colors
-                                                                          .black26,
-                                                                      blurRadius:
-                                                                          10,
-                                                                      spreadRadius:
-                                                                          2,
-                                                                    ),
-                                                                  ],
+                                                                          .circular(
+                                                                              2),
                                                                 ),
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    vertical:
-                                                                        20,
-                                                                    horizontal:
-                                                                        15),
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: [
-                                                                    // Modal Handle
-                                                                    Container(
-                                                                      width: 40,
-                                                                      height: 4,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Colors
-                                                                            .grey[300],
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(2),
-                                                                      ),
-                                                                      margin: const EdgeInsets
-                                                                          .only(
-                                                                          bottom:
-                                                                              15),
-                                                                    ),
-                                                                    // Options
-                                                                    ListTile(
-                                                                      leading: Icon(
-                                                                          Icons
-                                                                              .edit,
-                                                                          color:
-                                                                              Colors.blue),
-                                                                      title:
-                                                                          Text(
-                                                                        'Edit',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          color:
-                                                                              Colors.blue,
-                                                                        ),
-                                                                      ),
-                                                                      onTap:
-                                                                          () {
-                                                                        Get.back();
-                                                                        Get.toNamed(
-                                                                            Routes.addEditEvent,
-                                                                            arguments: {
-                                                                              'event': events?[index],
-                                                                              'isEdit': true
-                                                                            })?.then(
-                                                                            (value) {
-                                                                          Future.delayed(
-                                                                              const Duration(seconds: 2),
-                                                                              () {
-                                                                            setState(() {
-                                                                              eventsList = EventsClass.getEvents();
-                                                                            });
-                                                                          });
-                                                                        });
-                                                                      },
-                                                                    ),
-                                                                    Divider(
-                                                                        color: Colors
-                                                                            .grey[300]),
-                                                                    ListTile(
-                                                                      leading: Icon(
-                                                                          Icons
-                                                                              .delete,
-                                                                          color:
-                                                                              Colors.red),
-                                                                      title:
-                                                                          Text(
-                                                                        'Delete',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              16,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          color:
-                                                                              Colors.red,
-                                                                        ),
-                                                                      ),
-                                                                      onTap:
-                                                                          () {
-                                                                        Get.back();
-                                                                        showDialog(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (context) {
-                                                                            return AlertDialog(
-                                                                              title: Text('Delete Event'),
-                                                                              content: Text('Are you sure you want to delete this event?'),
-                                                                              actions: [
-                                                                                TextButton(
-                                                                                  onPressed: () {
-                                                                                    Get.back();
-                                                                                  },
-                                                                                  child: Text('Cancel', style: TextStyle(color: Colors.blue)),
-                                                                                ),
-                                                                                TextButton(
-                                                                                  onPressed: () {
-                                                                                    Get.back();
-                                                                                    CustomWidgets.showLoadingLoader();
-                                                                                    EventsClass.deleteEvent(events?[index].id ?? 0).then((value) {
-                                                                                      Get.back();
-                                                                                      if (value) {
-                                                                                        CustomWidgets.errorSnackBar(content: 'Event deleted successfully');
-                                                                                        setState(() {
-                                                                                          eventsList = EventsClass.getEvents();
-                                                                                        });
-                                                                                      } else {
-                                                                                        CustomWidgets.errorSnackBar(content: 'Error deleting event');
-                                                                                      }
-                                                                                    });
-                                                                                  },
-                                                                                  child: Text('Delete', style: TextStyle(color: Colors.red)),
-                                                                                ),
-                                                                              ],
-                                                                            );
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        bottom:
+                                                                            15),
                                                               ),
-                                                            );
-                                                          },
-                                                          icon: const Icon(
-                                                              Icons.more_vert,
-                                                              color: Colors
-                                                                  .white70),
+                                                              // Options
+                                                              ListTile(
+                                                                leading: Icon(
+                                                                    Icons.edit,
+                                                                    color: Colors
+                                                                        .blue),
+                                                                title: Text(
+                                                                  'Edit',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                ),
+                                                                onTap: () {
+                                                                  Get.back();
+                                                                  Get.toNamed(
+                                                                      Routes
+                                                                          .addEditEvent,
+                                                                      arguments: {
+                                                                        'event':
+                                                                            events?[index],
+                                                                        'isEdit':
+                                                                            true
+                                                                      })?.then(
+                                                                      (value) {
+                                                                    Future.delayed(
+                                                                        const Duration(
+                                                                            seconds:
+                                                                                2),
+                                                                        () {
+                                                                      setState(
+                                                                          () {
+                                                                        eventsList =
+                                                                            EventsClass.getEvents();
+                                                                      });
+                                                                    });
+                                                                  });
+                                                                },
+                                                              ),
+                                                              Divider(
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      300]),
+                                                              ListTile(
+                                                                leading: Icon(
+                                                                    Icons
+                                                                        .delete,
+                                                                    color: Colors
+                                                                        .red),
+                                                                title: Text(
+                                                                  'Delete',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    color: Colors
+                                                                        .red,
+                                                                  ),
+                                                                ),
+                                                                onTap: () {
+                                                                  Get.back();
+                                                                  showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (context) {
+                                                                      return AlertDialog(
+                                                                        title: Text(
+                                                                            'Delete Event'),
+                                                                        content:
+                                                                            Text('Are you sure you want to delete this event?'),
+                                                                        actions: [
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                            },
+                                                                            child:
+                                                                                Text('Cancel', style: TextStyle(color: Colors.blue)),
+                                                                          ),
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Get.back();
+                                                                              CustomWidgets.showLoadingLoader();
+                                                                              EventsClass.deleteEvent(events?[index].id ?? 0).then((value) {
+                                                                                Get.back();
+                                                                                if (value) {
+                                                                                  CustomWidgets.errorSnackBar(content: 'Event deleted successfully');
+                                                                                  setState(() {
+                                                                                    eventsList = EventsClass.getEvents();
+                                                                                  });
+                                                                                } else {
+                                                                                  CustomWidgets.errorSnackBar(content: 'Error deleting event');
+                                                                                }
+                                                                              });
+                                                                            },
+                                                                            child:
+                                                                                Text('Delete', style: TextStyle(color: Colors.red)),
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                      );
+                                                    },
+                                                    icon: const Icon(
+                                                        Icons.more_vert,
+                                                        color: Colors.white70),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       );
                     } else {
                       return const Center(
-                        child: Text('No events found'),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3.0, // Adjust thickness
+                          color: Colors.blue, // Spinner color
+                        ),
                       );
                     }
                   }
