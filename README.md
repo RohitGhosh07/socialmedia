@@ -1,9 +1,9 @@
 
 ---
 
-# 🎉 KKH Events App
+# 🎉 Socail Media App
 
-Welcome to **KKH Events**, your one-stop solution for organizing, attending, and discovering amazing events! 🎊 Built with 💙 using Flutter, this app offers a sleek and modern user experience for event management.
+Welcome to **Socail Media**, your one-stop solution for organizing, attending, and discovering amazing events! 🎊 Built with 💙 using Flutter, this app offers a sleek and modern user experience for event management.
 
 ## 📱 Features
 
