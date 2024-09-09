@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:kkh_events/models/image_model.dart';
 import 'package:kkh_events/providers/image_provider.dart';
 import 'package:kkh_events/screens/swipe_screen.dart';
 import 'package:provider/provider.dart';

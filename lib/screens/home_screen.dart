@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kkh_events/screens/chat_screen.dart';
 import 'package:kkh_events/screens/components/BottomBar.dart';
+import 'package:kkh_events/screens/notification_screen.dart';
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 
@@ -52,6 +54,27 @@ class _HomeScreenState extends State<HomeScreen> {
           'assets/images/2 - Copy.png', // Replace with your image asset path
           height: 40, // Adjust the height as needed
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              // Handle notifications action
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NotificationScreen()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.forum),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatScreen()),
+              );
+            },
+          ),
+        ],
       ),
 
       body: posts.isEmpty && isLoading

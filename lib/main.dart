@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:kkh_events/storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:kkh_events/screens/splash_screen.dart';
@@ -9,10 +10,15 @@ import 'providers/image_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.put(Storage()).initStorage();
+  await Hive.initFlutter(); // Initialize Hive for Flutter
+  await Hive.openBox('userBox'); // Open a box for user data
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AppImageProvider()),
+        // ChangeNotifierProvider(
+        //     create: (_) =>
+        //         UserProvider()..loadUserData()), // Add UserProvider here
       ],
       child: const MyApp(),
     ),
@@ -30,6 +36,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: SplashScreen(),
+      navigatorObservers: [ClearFocusOnPush()],
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:kkh_events/admin/class/login_api_class.dart';
 import 'package:kkh_events/admin/class/types_class.dart';
 import 'package:kkh_events/admin/custom_widgets.dart';
 import 'package:kkh_events/admin/routes/routes.dart';
+import 'package:kkh_events/screens/swipe_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,6 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: Row(
           children: [
+            // IconButton(
+            //   icon: Icon(
+            //     Icons.arrow_back_ios,
+            //     color: Colors.black,
+            //   ),
+            //   onPressed: () {
+            //     // Navigate to the swipe screen
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => MainScreen()),
+            //     );
+            //   },
+            // ),
             Image.asset(
               'assets/images/2 - Copy.png', // Replace with your image path
               height: 40,

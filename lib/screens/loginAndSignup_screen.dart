@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kkh_events/screens/components/CustomNotification.dart';
+import 'package:kkh_events/screens/components/bottom_modal_sign_up_form.dart';
+import 'package:kkh_events/screens/components/login_bottom_modal.dart';
+import 'package:kkh_events/screens/main_main.dart';
 
 class LoginAndSignupScreen extends StatelessWidget {
+  const LoginAndSignupScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +17,7 @@ class LoginAndSignupScreen extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
+                image: const AssetImage(
                     'assets/images/download (1).gif'), // Replace with your background image path
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
@@ -27,15 +33,52 @@ class LoginAndSignupScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Sign In Button
                   ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: FaIcon(FontAwesomeIcons.user, color: Colors.black87),
-                    label: Text('Sign In',
-                        style: TextStyle(fontSize: 18, color: Colors.black87)),
+                    onPressed: () async {
+                      bool? result = await showModalBottomSheet<bool>(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            topRight: Radius.circular(20.0),
+                          ),
+                        ),
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
+                            ), // Adjust for keyboard
+                            child:
+                                const LoginModal(), // Use the bottom modal form here
+                          );
+                        },
+                      );
+
+                      if (result == true) {
+                        // If login was successful, navigate to the main screen
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MainMainScreen(), // Replace with your main screen
+                          ),
+                        );
+                      } else {
+                        // Optionally handle failed login here
+                        CustomNotification.show(
+                            context, "Please try logging in again.");
+                      }
+                    },
+                    icon: const FaIcon(FontAwesomeIcons.lock,
+                        color: Colors.black87),
+                    label: const Text(
+                      'Log In',
+                      style: TextStyle(fontSize: 18, color: Colors.black87),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 55),
+                      minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                         side:
@@ -44,35 +87,18 @@ class LoginAndSignupScreen extends StatelessWidget {
                       elevation: 3.0,
                     ),
                   ),
-                  SizedBox(height: 15),
-                  // Log In Button
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: FaIcon(FontAwesomeIcons.lock, color: Colors.black87),
-                    label: Text('Log In',
-                        style: TextStyle(fontSize: 18, color: Colors.black87)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 55),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        side:
-                            BorderSide(color: Colors.grey.shade400, width: 1.5),
-                      ),
-                      elevation: 3.0,
-                    ),
-                  ),
-                  SizedBox(height: 15),
+
+                  const SizedBox(height: 15),
                   // Log In with Google Button
                   ElevatedButton.icon(
                     onPressed: () {},
-                    icon:
-                        FaIcon(FontAwesomeIcons.google, color: Colors.black87),
-                    label: Text('Log In with Google',
+                    icon: const FaIcon(FontAwesomeIcons.google,
+                        color: Colors.black87),
+                    label: const Text('Log In with Google',
                         style: TextStyle(fontSize: 18, color: Colors.black87)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      minimumSize: Size(double.infinity, 55),
+                      minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                         side:
@@ -81,18 +107,39 @@ class LoginAndSignupScreen extends StatelessWidget {
                       elevation: 3.0,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   // Additional UI Elements (Optional)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Don’t have an account?',
                         style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       TextButton(
-                        onPressed: () {},
-                        child: Text(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            builder: (BuildContext context) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom), // Adjust for keyboard
+                                child:
+                                    BottomModalSignupForm(), // Use the bottom modal form here
+                              );
+                            },
+                          );
+                        },
+                        child: const Text(
                           'Sign Up',
                           style: TextStyle(
                               color: Colors.white,

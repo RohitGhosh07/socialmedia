@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:kkh_events/api/UserProvider.dart';
 import 'package:kkh_events/screens/loginAndSignup_screen.dart';
 import 'package:kkh_events/screens/login_screen.dart';
 import 'package:kkh_events/screens/main_main.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -14,14 +16,25 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          // builder: (context) => LoginAndSignupScreen(),
-          builder: (context) => MainMainScreen(),
-        ),
-      );
+    Timer(Duration(seconds: 3), () async {
+      var userAdapter = UserProvider(); // Create an instance of UserAdapter
+      bool exists = await userAdapter.userExists(); // Call userExists
+
+      if (exists) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainMainScreen(),
+          ),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginAndSignupScreen(),
+          ),
+        );
+      }
     });
   }
 

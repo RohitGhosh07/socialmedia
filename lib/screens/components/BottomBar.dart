@@ -28,9 +28,6 @@ class _BottomBarState extends State<BottomBar> {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 1) {
-      runApp(const Admin());
-    }
     widget
         .onTabTapped(index); // Call the provided function to update the screen
   }
@@ -42,45 +39,30 @@ class _BottomBarState extends State<BottomBar> {
       onTap: _onItemTapped,
       type: BottomNavigationBarType.fixed,
       items: <BottomNavigationBarItem>[
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.home_filled,
-        //       size: 30,
-        //       color: _selectedIndex == 0 ? Colors.black : Colors.grey),
-        //   label: '',
-        // ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.search,
-        //       size: 30,
-        //       color: _selectedIndex == 1 ? Colors.black : Colors.grey),
-        //   label: '',
-        // ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.play_circle_fill,
+          icon: Icon(Icons.home_filled,
+              size: 30,
+              color: _selectedIndex == 0 ? Colors.black : Colors.grey),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search,
+              size: 30,
+              color: _selectedIndex == 1 ? Colors.black : Colors.grey),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.add,
               size: 30,
               color: _selectedIndex == 2 ? Colors.black : Colors.grey),
           label: '',
         ),
-        // BottomNavigationBarItem(
-        //   icon: Container(
-        //     padding: EdgeInsets.all(0),
-        //     decoration: BoxDecoration(
-        //       shape: BoxShape.circle,
-        //       gradient: LinearGradient(
-        //         colors: [Colors.redAccent, Colors.orangeAccent],
-        //         begin: Alignment.topLeft,
-        //         end: Alignment.bottomRight,
-        //       ),
-        //     ),
-        //     child: Icon(Icons.play_circle_fill, size: 30, color: Colors.white),
-        //   ),
-        //   label: '',
-        // ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.notifications,
-        //       size: 30,
-        //       color: _selectedIndex == 3 ? Colors.black : Colors.grey),
-        //   label: '',
-        // ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.play_arrow,
+              size: 30,
+              color: _selectedIndex == 3 ? Colors.black : Colors.grey),
+          label: '',
+        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person,
               size: 30,
