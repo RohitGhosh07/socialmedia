@@ -55,6 +55,18 @@ class UserProvider extends TypeAdapter<User> {
     return box.containsKey('user');
   }
 
+// Function to get user ID
+  Future<int?> get userId async {
+    var box = await Hive.openBox('userBox');
+    var userData = box.get('user');
+
+    if (userData != null) {
+      User user = User.fromMap(Map<String, dynamic>.from(userData));
+      return user.id; // Return user ID
+    }
+    return null;
+  }
+
   Future<void> logout() async {
     try {
       // Open the Hive box
@@ -64,7 +76,7 @@ class UserProvider extends TypeAdapter<User> {
       await box.clear();
 
       // Optionally close the box if no longer needed
-      // await box.close();
+      await box.close();
     } catch (e) {
       print("Error logging out: $e");
       // Handle any errors, e.g., show a snack bar or alert dialog

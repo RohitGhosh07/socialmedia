@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kkh_events/api/UserProvider.dart';
+import 'package:kkh_events/api/routes/jumbledPost.dart';
+import 'package:kkh_events/api/routes/profilesearch.dart';
+import 'package:kkh_events/screens/PostScreen.dart';
+import 'package:kkh_events/screens/profile_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:kkh_events/providers/image_provider.dart';
-import 'package:kkh_events/screens/swipe_screen.dart';
-import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -11,20 +14,72 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   String _searchQuery = '';
+  List<JumbledPostAPI> posts = [];
+  List<Users> _searchResults = [];
+  bool isLoading = true;
+  int? mainuserId;
 
   @override
   void initState() {
     super.initState();
-    // Load initial images
-    Provider.of<AppImageProvider>(context, listen: false).loadImages();
+    fetchJumbledPosts();
+    _fetchUserId();
+  }
+
+// Async function to fetch user ID and handle Future properly
+  Future<void> _fetchUserId() async {
+    UserProvider userProvider = UserProvider();
+    int? fetchedUserId = await userProvider.userId; // Await the Future
+    setState(() {
+      mainuserId = fetchedUserId; // Update the state with the fetched user ID
+    });
+  }
+
+  Future<void> fetchJumbledPosts() async {
+    try {
+      final List<JumbledPostAPI> fetchedPosts =
+          await JumbledPostAPI.profilepost();
+      setState(() {
+        posts = fetchedPosts;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error fetching posts: $e");
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _performSearch(String query) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    if (query.isNotEmpty) {
+      try {
+        ProfileSearchAPI searchAPI = ProfileSearchAPI();
+        ProfileSearchAPI result = await searchAPI.profilesearchresult(query);
+        setState(() {
+          _searchResults = result.users ?? [];
+          isLoading = false;
+        });
+      } catch (e) {
+        print("Search error: $e");
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _searchResults = [];
+        isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final imageProvider = Provider.of<AppImageProvider>(context);
-    final images = imageProvider.images;
-    final isLoading = imageProvider.isLoading;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -36,8 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
               setState(() {
                 _searchQuery = value;
               });
-              // Update search query in the provider
-              imageProvider.searchValue = value;
+              _performSearch(value);
             },
             decoration: InputDecoration(
               hintText: 'Search...',
@@ -57,12 +111,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ? GridView.builder(
               padding: const EdgeInsets.all(2.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 3 columns like Instagram
+                crossAxisCount: 3,
                 crossAxisSpacing: 2.0,
                 mainAxisSpacing: 2.0,
-                childAspectRatio: 1.0, // Square items
+                childAspectRatio: 1.0,
               ),
-              itemCount: 66, // Show 9 shimmer tiles (3x3 grid)
+              itemCount: 66,
               itemBuilder: (context, index) {
                 return Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
@@ -73,38 +127,98 @@ class _SearchScreenState extends State<SearchScreen> {
                 );
               },
             )
-          : GridView.builder(
-              padding: const EdgeInsets.all(2.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // 3 columns like Instagram
-                crossAxisSpacing: 2.0,
-                mainAxisSpacing: 2.0,
-                childAspectRatio: 1.0, // Square items
-              ),
-              itemCount: images.length,
-              itemBuilder: (context, index) {
-                final image = images[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              MainScreen()), // Replace MainScreen with your screen's name
+          : _searchResults.isEmpty
+              ? GridView.builder(
+                  padding: const EdgeInsets.all(2.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 2.0,
+                    mainAxisSpacing: 2.0,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: posts.length,
+                  itemBuilder: (context, index) {
+                    final post = posts[index];
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostflowScreen(
+                              posts: posts,
+                              initialIndex: index,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: post.mediaType == 'video' &&
+                                  post.thumbNail != null
+                              ? DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                      post.thumbNail!),
+                                  fit: BoxFit.cover,
+                                )
+                              : post.mediaUrl != null
+                                  ? DecorationImage(
+                                      image: CachedNetworkImageProvider(
+                                          post.mediaUrl!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                          gradient: post.mediaUrl == null
+                              ? LinearGradient(
+                                  colors: [
+                                    Colors.grey[300]!,
+                                    Colors.grey[400]!
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                )
+                              : null,
+                        ),
+                        child: post.mediaType == 'video'
+                            ? Align(
+                                alignment: Alignment.center,
+                                child: Icon(Icons.play_circle_fill,
+                                    color: Colors.white54),
+                              )
+                            : post.mediaUrl == null
+                                ? Icon(Icons.image, color: Colors.white54)
+                                : null,
+                      ),
                     );
                   },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                            image.imgUrl ?? 'assets/images/KKH Events.png'),
-                        fit: BoxFit.cover,
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(2.0),
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    final user = _searchResults[index];
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: user.profilePic != null
+                            ? CachedNetworkImageProvider(user.profilePic!)
+                            : null,
+                        child:
+                            user.profilePic == null ? Icon(Icons.person) : null,
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
+                      title: Text(user.username ?? 'Unknown'),
+                      subtitle: Text(user.email ?? 'No email'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                userId: user.id, mainuserId: mainuserId),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
     );
   }
 }

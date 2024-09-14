@@ -62,8 +62,15 @@ class ProfileUser {
   String? email;
   String? bio;
   String? profilePic;
+  int? postCount;
 
-  ProfileUser({this.id, this.username, this.email, this.bio, this.profilePic});
+  ProfileUser(
+      {this.id,
+      this.username,
+      this.email,
+      this.bio,
+      this.profilePic,
+      this.postCount});
 
   ProfileUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -71,6 +78,7 @@ class ProfileUser {
     email = json['email'];
     bio = json['bio'];
     profilePic = json['profilePic'];
+    postCount = json['postCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +88,7 @@ class ProfileUser {
     data['email'] = this.email;
     data['bio'] = this.bio;
     data['profilePic'] = this.profilePic;
+    data['postCount'] = this.postCount;
     return data;
   }
 }
@@ -92,6 +101,9 @@ class Posts {
   int? userId;
   String? createdAt;
   String? updatedAt;
+  String? profilePic;
+  String? username;
+  String? thumbNail;
 
   Posts(
       {this.id,
@@ -100,7 +112,10 @@ class Posts {
       this.mediaType,
       this.userId,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.profilePic,
+      this.username,
+      this.thumbNail});
 
   Posts.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -110,6 +125,9 @@ class Posts {
     userId = json['userId'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    profilePic = json['profilePic'];
+    username = json['username'];
+    thumbNail = json['thumbNail'];
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +139,9 @@ class Posts {
     data['userId'] = this.userId;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
+    data['profilePic'] = this.profilePic;
+    data['username'] = this.username;
+    data['thumbNail'] = this.thumbNail;
     return data;
   }
 }

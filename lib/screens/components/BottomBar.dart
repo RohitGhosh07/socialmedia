@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:kkh_events/admin/main.dart';
 
 class BottomBar extends StatefulWidget {
   final int currentIndex;
   final Function(int) onTabTapped;
+  final String profilePic;
 
   const BottomBar({
     Key? key,
     required this.currentIndex,
     required this.onTabTapped,
+    required this.profilePic,
   }) : super(key: key);
 
   @override
@@ -64,9 +65,36 @@ class _BottomBarState extends State<BottomBar> {
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person,
-              size: 30,
-              color: _selectedIndex == 4 ? Colors.black : Colors.grey),
+          icon: Stack(
+            children: [
+              CircleAvatar(
+                radius: 14, // Adjust as needed
+                backgroundImage: NetworkImage(widget.profilePic),
+                backgroundColor: Colors
+                    .transparent, // Optional: Set background color if needed
+              ),
+              // Border container
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 50, // Adjust as needed
+                    height: 50, // Adjust as needed
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: _selectedIndex == 4
+                            ? Colors.black.withOpacity(0.5)
+                            : Colors.transparent, // Border color
+                        width: 2, // Border width
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // CircleAvatar
+            ],
+          ),
           label: '',
         ),
       ],

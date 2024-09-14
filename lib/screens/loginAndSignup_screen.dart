@@ -18,11 +18,26 @@ class LoginAndSignupScreen extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: const AssetImage(
-                    'assets/images/download (1).gif'), // Replace with your background image path
+                    'assets/images/loginbg.gif'), // Replace with your background image path
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                     Colors.black54.withOpacity(0.3), BlendMode.screen),
               ),
+            ),
+          ),
+          // Centered logo
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/naiyorounded.png', // Replace with your logo image path
+                  height: 150, // Set the desired height of the logo
+                ),
+                const SizedBox(
+                    height: 30), // Spacing between the logo and the buttons
+              ],
             ),
           ),
           // Content
@@ -130,9 +145,9 @@ class LoginAndSignupScreen extends StatelessWidget {
                             builder: (BuildContext context) {
                               return Padding(
                                 padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom), // Adjust for keyboard
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                ), // Adjust for keyboard
                                 child:
                                     BottomModalSignupForm(), // Use the bottom modal form here
                               );

@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
           borderRadius:
               BorderRadius.circular(20), // Adjust the radius as needed
           child: Image.asset(
-            'assets/images/KKH Events.png', // Replace with your image asset path
+            'assets/images/naiyo.png', // Replace with your image asset path
             width: 200,
             height: 200,
             fit:

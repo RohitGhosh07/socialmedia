@@ -1,11 +1,18 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:kkh_events/api/routes/createpost.dart';
+import 'package:kkh_events/screens/ReelPostScreen.dart';
+import 'package:kkh_events/screens/components/CustomNotification.dart';
+import 'package:kkh_events/screens/profile_screen.dart';
 import 'package:photo_manager/photo_manager.dart'; // For accessing gallery images and videos
 import 'package:image_picker/image_picker.dart'; // For capturing images
 import 'package:permission_handler/permission_handler.dart'; // For requesting permissions
 
 class PostScreen extends StatefulWidget {
+  final int userId; // Pass the user ID to this screen
+
+  const PostScreen({Key? key, required this.userId}) : super(key: key);
+
   @override
   _PostScreenState createState() => _PostScreenState();
 }
@@ -13,11 +20,14 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   AssetEntity? selectedMedia;
   List<AssetEntity> galleryMedia = [];
+  final TextEditingController captionController =
+      TextEditingController(); // Controller for caption
 
   @override
   void initState() {
     super.initState();
     _requestPermissionsAndLoadMedia();
+    // print("User ID: ${widget.userId}");
   }
 
   Future<void> _requestPermissionsAndLoadMedia() async {
@@ -132,17 +142,89 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Future<void> _postMedia() async {
+    if (selectedMedia == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No media selected')),
+      );
+      return;
+    }
+
+    // Determine the media type (image or video) based on AssetEntity's type
+    String mediaType = _getMediaType(selectedMedia!);
+
+    if (mediaType == 'unsupported') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Unsupported file type. Only JPG, PNG, GIF, and MP4 are allowed.')),
+      );
+      return;
+    }
+
+    print("Caption: ${captionController.text}");
+    print("Media: $selectedMedia");
+    print("User ID: ${widget.userId}");
+    print("Media Type: $mediaType");
+
+    try {
+      await CreatePostAPI.postcreation(
+        captionController.text, // Post content
+        selectedMedia!, // Passing AssetEntity as media
+        mediaType, // Correct media type (image or video)
+        widget.userId, // User ID
+      );
+      CustomNotification.show(context, "Post created successfully");
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => ProfileScreen(
+      //       userId:
+      //           widget.userId, // Pass the user ID or other necessary parameters
+      //     ),
+      //   ),
+      // );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${e.toString()}')),
+      );
+    }
+  }
+
+// Helper function to determine media type
+  String _getMediaType(AssetEntity media) {
+    if (media.type == AssetType.image) {
+      if (media.mimeType == 'image/jpeg' ||
+          media.mimeType == 'image/jpg' ||
+          media.mimeType == 'image/png' ||
+          media.mimeType == 'image/gif') {
+        return 'image';
+      }
+    } else if (media.type == AssetType.video) {
+      if (media.mimeType == 'video/mp4') {
+        return 'video';
+      }
+    }
+    return 'unsupported'; // Return unsupported if the media type is not allowed
+  }
+
+  int _selectedIndex = 0; // To track which screen is active
+
+  // This function handles the bottom bar navigation
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // Main post screen UI (Your original post UI)
+  Widget _postScreen() {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Post'),
         actions: [
           TextButton(
-            onPressed: () {
-              // Logic to post the image/video with the caption
-              print('Posted media: ${selectedMedia?.id}');
-            },
+            onPressed: _postMedia, // Post the media
             child: const Text(
               'Share',
               style: TextStyle(color: Colors.blue, fontSize: 18),
@@ -169,6 +251,17 @@ class _PostScreenState extends State<PostScreen> {
                     },
                   )
                 : Container(color: Colors.grey[300]),
+          ),
+          // Caption input
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: captionController,
+              decoration: const InputDecoration(
+                labelText: 'Write a caption...',
+                border: OutlineInputBorder(),
+              ),
+            ),
           ),
           // Bottom bar with buttons
           Container(
@@ -211,13 +304,16 @@ class _PostScreenState extends State<PostScreen> {
                           snapshot.hasData) {
                         return Stack(
                           children: [
-                            Image.memory(snapshot.data!, fit: BoxFit.cover),
+                            AspectRatio(
+                                aspectRatio: 1,
+                                child: Image.memory(snapshot.data!,
+                                    fit: BoxFit.cover)),
                             if (media == selectedMedia)
                               Positioned(
                                 top: 0,
                                 left: 0,
                                 child: Container(
-                                  color: Colors.blue.withOpacity(0.5),
+                                  color: Colors.white.withOpacity(0.8),
                                   width: 200,
                                   height: 200,
                                 ),
@@ -234,6 +330,53 @@ class _PostScreenState extends State<PostScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // Main build function
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody:
+          true, // This allows the BottomNavigationBar to float over the body
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          _postScreen(),
+          ReelCameraScreen(
+            userId: widget.userId, // This can be replaced with ReelScreen()
+          ), // This can be replaced with ReelScreen()
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 60.0, vertical: 10.0), // Padding for gaps on the sides
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30.0), // Rounded edges
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            backgroundColor: Colors.black
+                .withOpacity(0.8), // Semi-transparent dark background
+            type: BottomNavigationBarType
+                .fixed, // To maintain fixed size of icons and text
+            showSelectedLabels: true, // Show only text labels
+            showUnselectedLabels: true, // Same for unselected items
+            selectedItemColor: Colors.white, // Color for the selected text
+            unselectedItemColor: Colors.grey, // Color for the unselected text
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: SizedBox.shrink(), // Remove icon to show only text
+                label: 'Posts', // Text label
+              ),
+              BottomNavigationBarItem(
+                icon: SizedBox.shrink(), // Remove icon to show only text
+                label: 'Zips', // Text label
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

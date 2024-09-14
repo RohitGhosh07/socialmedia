@@ -28,7 +28,15 @@ dependencies:
   photo_manager: ^3.3.0
   permission_handler: ^11.3.1
   image_cropper: ^8.0.2
-  
+  flutter_svg: ^2.0.10+1
+  cached_network_image: ^3.4.1
+  flick_video_player: ^0.9.0
+  visibility_detector: ^0.4.0+2
+  wakelock_plus: ^1.2.8
+  video_thumbnail: ^0.5.3
+  camera: ^0.10.5+9
+  webview_flutter: ^4.8.0
+
 
 
 
@@ -40,19 +48,23 @@ dev_dependencies:
   hive_generator: ^2.0.1
   build_runner: ^2.1.4
 
-#   icons_launcher:
-#   image_path: "assets/images/KKH Events.png"
-#   platforms:
-#     android:
-#       enable: true
-#     ios:
-#       enable: true
-# flutter_launcher_icons:
-#   android: "launcher_icon"
-#   ios: true
-#   image_path: "assets/images/KKH Events.png"
-#   min_sdk_android: 21 # android min sdk min:16, default 21
-#   remove_alpha_ios: true
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/naiyorounded.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/naiyorounded.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/naiyorounded.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/naiyorounded.png"
 
 
 flutter:
