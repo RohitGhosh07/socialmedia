@@ -109,7 +109,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 builder: (context) => ChattingScreen(
                                     // userId: widget.userId,
                                     // otherUserId: otherUser!.id!,
-                                    ),
+                                    otherUserName: otherUser!.username!,
+                                    otherUserProfilePic: otherUser.profilePic!),
                               ),
                             );
                           },

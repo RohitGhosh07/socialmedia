@@ -8,7 +8,7 @@ import 'package:video_player/video_player.dart';
 
 class PostflowScreen<T> extends StatefulWidget {
   final List<T> posts;
-  final int initialIndex; // Added to pass the index you want to jump to
+  final int initialIndex;
 
   const PostflowScreen({Key? key, required this.posts, this.initialIndex = 0})
       : super(key: key);
@@ -28,12 +28,11 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
     _fetchUserId();
     _scrollController = ScrollController();
 
-    // Scroll to the desired index when the screen is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.initialIndex > 0 &&
           widget.initialIndex < widget.posts.length) {
         _scrollController.animateTo(
-          widget.initialIndex * 600.0, // Adjust if the height differs
+          widget.initialIndex * 600.0,
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeInOut,
         );
@@ -58,7 +57,7 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
         centerTitle: true,
       ),
       body: ListView.builder(
-        controller: _scrollController, // Use the ScrollController
+        controller: _scrollController,
         itemCount: widget.posts.length,
         itemBuilder: (context, index) {
           return _buildPostView(widget.posts[index], index);
@@ -75,6 +74,8 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
     String? content;
     String? createdAt;
     int? userid;
+    String? likeCount;
+    String? commentCount;
 
     if (post is Posts) {
       profilePic = post.profilePic;
@@ -84,6 +85,8 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
       content = post.content;
       createdAt = post.createdAt;
       userid = post.userId;
+      likeCount = post.likeCount;
+      commentCount = post.likeCount;
     } else if (post is JumbledPostAPI) {
       profilePic = post.profilePic;
       username = post.username;
@@ -92,6 +95,8 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
       content = post.content;
       createdAt = post.createdAt;
       userid = post.userId;
+      likeCount = post.likeCount;
+      commentCount = post.likeCount;
     }
 
     return Column(
@@ -135,8 +140,7 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
                         }).map((post) {
                           if (post is Posts) {
                             return {
-                              'mediaUrl':
-                                  post.mediaUrl ?? '', // Handle null safety
+                              'mediaUrl': post.mediaUrl ?? '',
                               'username': post.username ?? '',
                               'profilePic': post.profilePic ?? '',
                               'content': post.content ?? '',
@@ -151,10 +155,9 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
                               'createdAt': post.createdAt ?? '',
                             };
                           }
-                          return <String, String?>{}; // Empty map as fallback
+                          return <String, String?>{};
                         }).toList(),
-                        initialIndex:
-                            index, // Pass the index of the tapped video
+                        initialIndex: index,
                       ),
                     ),
                   );
@@ -169,6 +172,59 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
                     fit: BoxFit.cover,
                   )
                 : _buildBrokenImage(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.favorite_border),
+                onPressed: () {},
+              ),
+              Text(likeCount ?? '0'),
+              IconButton(
+                icon: const Icon(Icons.comment),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {},
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.bookmark_border),
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Liked by user1 and others',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${username ?? 'User'}: ${content ?? 'Great picture!'}',
+                style: const TextStyle(color: Colors.black),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'View all comments',
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                createdAt ?? '5 minutes ago',
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -181,7 +237,7 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
             _videoControllers[index]?.play();
           });
         }).catchError((error) {
-          print("Video player error: $error"); // Handle error here
+          print("Video player error: $error");
         });
     }
 
@@ -221,6 +277,54 @@ class _PostflowScreenState<T> extends State<PostflowScreen<T>> {
       width: double.infinity,
       height: 400,
       color: Colors.grey[300],
+    );
+  }
+
+  void _showCommentsBottomModal(BuildContext context, T post) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Comments',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            // Simulated comments section
+            ListTile(
+              title: Text('${post is Posts ? post.content : ''}'),
+              subtitle: const Text('This is a comment'),
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Add a comment...',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      // Add logic to submit a comment
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

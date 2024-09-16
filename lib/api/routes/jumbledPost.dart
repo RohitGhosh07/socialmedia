@@ -14,6 +14,7 @@ class JumbledPostAPI {
   String? profilePic;
   String? username;
   String? thumbNail;
+  String? likeCount;
 
   JumbledPostAPI(
       {this.id,
@@ -26,7 +27,8 @@ class JumbledPostAPI {
       this.user,
       this.profilePic,
       this.username,
-      this.thumbNail});
+      this.thumbNail,
+      this.likeCount});
 
   JumbledPostAPI.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -40,6 +42,7 @@ class JumbledPostAPI {
     profilePic = json['profilePic'];
     username = json['username'];
     thumbNail = json['thumbNail'];
+    likeCount = json['likeCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +57,7 @@ class JumbledPostAPI {
     data['profilePic'] = this.profilePic;
     data['username'] = this.username;
     data['thumbNail'] = this.thumbNail;
+    data['likeCount'] = this.likeCount;
     if (this.user != null) {
       data['User'] = this.user!.toJson();
     }
