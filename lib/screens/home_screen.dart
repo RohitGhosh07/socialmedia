@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:kkh_events/api/UserProvider.dart';
 import 'package:kkh_events/api/class/User.dart';
 import 'package:kkh_events/api/routes/followingPost.dart'; // Assuming your API class is here
+import 'package:kkh_events/api/routes/profile_post.dart';
 import 'package:kkh_events/screens/chat_screen.dart';
+import 'package:kkh_events/screens/components/postview.dart';
 import 'package:kkh_events/screens/notification_screen.dart';
 import 'package:kkh_events/screens/profile_screen.dart';
 import 'package:shimmer/shimmer.dart';
@@ -177,111 +179,36 @@ class _HomeScreenState extends State<HomeScreen> {
             : ListView.builder(
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
-                  final post = posts[index]; // Get the post
+                  final post = posts.map((p) {
+                    return Posts(
+                        id: p.id,
+                        username: p.username,
+                        profilePic: p.profilePic,
+                        mediaUrl: p.mediaUrl,
+                        thumbNail: p.thumbNail,
+                        mediaType: p.mediaType,
+                        content: p.content,
+                        likeCount: p.likeCount,
+                        createdAt: p.createdAt,
+                        userId: p.userId);
+                  }).toList()[index]; // Get the post
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(post.profilePic ?? ''),
-                        ),
-                        title: Text(
-                          post.username ?? '',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        trailing: const Icon(Icons.more_vert),
-                        onTap: () {
-                          // Navigate to ProfileScreen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProfileScreen(
-                                userId: post
-                                    .userId, // Pass the user ID or other necessary parameters
-                                mainuserId: mainuserId!,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      CachedNetworkImage(
-                        imageUrl: post.mediaUrl ?? '', // Media URL of the post
-                        height: 400,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => _buildShimmerEffect(),
-                        errorWidget: (context, url, error) => Container(
-                          height: 400,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.grey[300]!,
-                                Colors.grey[100]!,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: const Icon(Icons.image_not_supported,
-                              size: 50, color: Colors.grey),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.favorite_border),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.comment),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.send),
-                              onPressed: () {},
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              icon: const Icon(Icons.bookmark_border),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Liked by user1 and others',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              '${post.username ?? 'User'}: ${post.content ?? 'Great picture!'}',
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'View all comments',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              post.createdAt ?? '5 minutes ago',
-                              style: const TextStyle(
-                                  color: Colors.grey, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                  return Postview(
+                    post: post, // Pass the current post to the Postview widget
+                    index: index, // Pass the index
+                    posts: posts.map((p) {
+                      return Posts(
+                          id: p.id,
+                          username: p.username,
+                          profilePic: p.profilePic,
+                          mediaUrl: p.mediaUrl,
+                          thumbNail: p.thumbNail,
+                          mediaType: p.mediaType,
+                          content: p.content,
+                          likeCount: p.likeCount,
+                          createdAt: p.createdAt,
+                          userId: p.userId);
+                    }).toList(), // Pass the entire list of posts (in case needed for video reels)
                   );
                 },
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kkh_events/api/UserProvider.dart';
 import 'package:kkh_events/api/routes/jumbledPost.dart';
+import 'package:kkh_events/api/routes/profile_post.dart';
 import 'package:kkh_events/api/routes/profilesearch.dart';
 import 'package:kkh_events/screens/PostScreen.dart';
 import 'package:kkh_events/screens/profile_screen.dart';
@@ -146,7 +147,22 @@ class _SearchScreenState extends State<SearchScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => PostflowScreen(
-                              posts: posts,
+                              posts: posts.map(
+                                (post) {
+                                  return Posts(
+                                    id: post.id,
+                                    username: post.username,
+                                    profilePic: post.profilePic,
+                                    mediaUrl: post.mediaUrl,
+                                    thumbNail: post.thumbNail,
+                                    mediaType: post.mediaType,
+                                    content: post.content,
+                                    likeCount: post.likeCount,
+                                    createdAt: post.createdAt,
+                                    userId: post.userId,
+                                  );
+                                },
+                              ).toList(),
                               initialIndex: index,
                             ),
                           ),

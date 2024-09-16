@@ -9,10 +9,15 @@ class FollowingPostAPI {
   int? id;
   String? content;
   String? mediaUrl;
-  String? createdAt;
+  String? mediaType;
   int? userId;
-  String? username;
+  String? createdAt;
+  String? updatedAt;
   String? profilePic;
+  String? username;
+  String? thumbNail;
+  String? likeCount;
+  User? user;
 
   FollowingPostAPI(
       {this.id,
@@ -21,7 +26,10 @@ class FollowingPostAPI {
       this.createdAt,
       this.userId,
       this.username,
-      this.profilePic});
+      this.profilePic,
+      this.thumbNail,
+      this.likeCount,
+      this.user});
 
   FollowingPostAPI.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -31,6 +39,9 @@ class FollowingPostAPI {
     userId = json['userId'];
     username = json['username'];
     profilePic = json['profilePic'];
+    thumbNail = json['thumbNail'];
+    likeCount = json['likeCount'];
+    user = json['User'] != null ? new User.fromJson(json['User']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +53,11 @@ class FollowingPostAPI {
     data['userId'] = this.userId;
     data['username'] = this.username;
     data['profilePic'] = this.profilePic;
+    data['thumbNail'] = this.thumbNail;
+    data['likeCount'] = this.likeCount;
+    if (this.user != null) {
+      data['User'] = this.user!.toJson();
+    }
     return data;
   }
 
@@ -64,9 +80,9 @@ class FollowingPostAPI {
         List<FollowingPostAPI> postList = responseList.map((postJson) {
           return FollowingPostAPI.fromJson(postJson);
         }).toList();
-        print(responseList);
+        // print(responseList);
         print(userId);
-        print(postList);
+        // print(postList);
         return postList; // Return the list of posts
       } else {
         // Handle other status codes here

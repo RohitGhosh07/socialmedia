@@ -36,6 +36,7 @@ dependencies:
   video_thumbnail: ^0.5.3
   camera: ^0.10.5+9
   webview_flutter: ^4.8.0
+  timeago: ^3.7.0
 
 
 
