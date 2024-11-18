@@ -17,7 +17,7 @@ class ChattingScreen extends StatefulWidget {
 
 class _ChattingScreenState extends State<ChattingScreen> {
   late final WebViewController _controller;
-  String url = 'http://192.168.50.226:3000';
+  String url = 'http://3.84.246.113:3000';
 
   @override
   void initState() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:kkh_events/api/routes/register.dart'; // Import your RegisterAPI class
+import 'package:kkh_events/screens/components/CustomNotification.dart';
 
 class BottomModalSignupForm extends StatefulWidget {
   const BottomModalSignupForm({super.key});
@@ -43,6 +44,8 @@ class _BottomModalSignupFormState extends State<BottomModalSignupForm> {
         profilePic,
       ); // Assuming RegisterAPI.list() triggers the request
       print("User Created: ${response.message}");
+      CustomNotification.show(context, "User created: ${response.message}");
+
       // Handle the response accordingly, show success or error messages
     } catch (e) {
       print("Error: $e");
